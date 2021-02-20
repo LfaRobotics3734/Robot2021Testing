@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Joystick;
-
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
   DifferentialDrive m_drive;
 
   double distance;
-
+  int orientation;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -75,14 +75,13 @@ public class Robot extends TimedRobot {
     //add an entry listener for changed values of "X", the lambda ("->" operator)
     //defines the code that should run when "X" changes
     table.addEntryListener("distance", (tab, key, entry, value, flags) -> {
-        System.out.println("Distance changed value: " + value.getValue());
         distance = Double.parseDouble(value.getValue().toString());
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
     //add an entry listener for changed values of "Y", the lambda ("->" operator)
     //defines the code that should run when "Y" changes
     orientationEntry.addListener(event -> {
-        System.out.println("Orientation 2 changed value: " + event.value.getValue());
+        orientation=Integer.parseInt(event.value.getValue().toString());
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
   }
@@ -145,11 +144,18 @@ public class Robot extends TimedRobot {
     System.out.println("Displacement_X: " + ahrs.getDisplacementX());
     System.out.println("Displacement_Y:" +ahrs.getDisplacementY());
 
-    if (distance > 10) {
+    /* if (distance > 10) {
       m_drive.tankDrive(0.5, 0.5);
     }
     else {
       m_drive.tankDrive(0, 0);
+    }
+     */
+    if(orientation==1){
+      m_drive.tankDrive(0.1,-0.1);
+    }
+    else if(orientation==-1){
+      m_drive.tankDrive(-0.1,0.1);
     }
     
     
